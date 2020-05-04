@@ -76,7 +76,7 @@ export class WebWallet {
     }
     let self = this
 
-    // Todo: Rewrite this using Container type
+
     this.container = new Container([{
       algorithm: SignatureAlgorithm.secp256k1,
       provider: {
@@ -113,10 +113,10 @@ export class WebWallet {
         }
       }
     }]);
-    console.log("CONSTRUCTING")
+
   }
 
-  // Todo: rewrite this w/ async/await
+
   public async addLockScripts(): Promise<any> {
     if (DEV_MODE) {
       let response = await this.apiProvider.get('/deps')
@@ -256,7 +256,6 @@ export class WebWallet {
     let hash = await this.passwordToSeed(password);
     hash = hash.toString("hex")
     const s = await this.storage.get("seed");
-    console.log(this.seed, "<< THIS SEED IN UNLOCK")
     if (s === hash) {
       this.seed = hash;
       return true;
@@ -277,7 +276,6 @@ export class WebWallet {
   private async reloadKeys(): Promise<any> {
     if (await this.storage.get("keys")) {
       const innerKeys = await this.storage.get("keys");
-      console.log(innerKeys, "<< INNER KEYS")
       innerKeys.forEach(key => {
         this.container.addPublicKey({
           payload: `0x${key.publicKey}`,
