@@ -1,0 +1,287 @@
+.App {
+  text-align: left;
+  background-color: #282c34;
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows:  minmax(0, 1fr) minmax(auto, 1fr) 25vh 25vh;
+  padding-left: 5%;
+  align-items: start;
+  grid-gap: 10px;
+
+}
+
+
+
+.button:hover {
+  border-color: white;
+  cursor: pointer;
+}
+
+
+
+.nervos-green-text {
+  color: #3cc68a;
+}
+
+.nervos-green-border {
+  border-color: #3cc68a;
+  border-width: 3px;
+}
+
+.toggle-button {
+  max-width: 200px;
+}
+
+.toggle-cell{
+  align-self: start;
+  color: white;
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+  font-size: calc(10px + 1vmin);
+  margin-left: -5%;
+  max-height: 20vh;
+
+}
+
+.toggle-cell .submitter {
+  border-style: solid;
+  border-color: #3cc68a;
+  border-width: 2px;
+  height: 5vh;
+  padding: 5px;
+}
+
+.toggle-cell p {
+  display: block;
+}
+
+.token-form-container {
+  border-color: #3cc68a;
+  border-width: 3px;
+  color: white;
+  grid-column: 1 / 2;
+  grid-row: 3 / 4;
+  border-color: #3cc68a;
+  border-width: 3px;
+  border-style: solid;
+  padding: 5px;
+  font-size: calc(10px + 1vmin);
+  display: flex;
+  justify-content: flex-start;
+  min-height: 0;
+
+  flex-wrap: wrap;
+  margin-left: -5%;
+  width: 300px;
+
+
+}
+
+.token-form-container input {
+  display: block;
+  margin-top: 10px;
+  border-style: solid;
+  border-width: 1px;
+  padding: 3px;
+  color: #3cc68a;
+  background-color: #282c34;
+  min-width: 50%
+
+}
+
+.token-form-container input[type="text"] {
+  border-color: white;
+}
+
+.token-form-container input[type="text"] {
+  border-color: white;
+}
+.token-form-container input[type="submit"]:hover {
+  color:white;
+}
+
+.submitter:hover {
+  cursor: pointer;
+  border-color: white;
+}
+
+
+.outpoint {
+  border-color: #3cc68a;
+  border-width: 3px;
+
+}
+
+.App-header {
+  min-height: 25vh;
+  display: flex;
+  align-content: flex-start;
+  justify-content: flex-start;
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+  font-size: calc(10px + 3vmin);
+  color: white;
+}
+
+.App-logo {
+  height: 20vmin;
+  pointer-events: none;
+  margin-left: -10%;
+
+}
+
+.Error {
+  color: #cf4c47;
+}
+
+.Success {
+  color: #00ff00;
+}
+
+.Wallet {
+  text-align: center;
+  background-color: #282c34;
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+  grid-template-rows: 50vh auto auto;
+  grid-template-columns: auto 50vw auto;
+}
+
+
+
+.Wallet-header {
+  color: white;
+  font-size: calc(10px + 3vmin);
+  grid-column: 2/3;
+}
+
+.Wallet-header .button-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-template-rows: auto;
+  justify-content: center;
+
+}
+
+.Wallet-header .password-form-container {
+  display: grid;
+  grid-template-columns: auto auto auto ;
+  grid-template-rows: auto;
+  justify-content: center;
+}
+
+.password-form-container {
+  border-color: #3cc68a;
+  border-width: 3px;
+  color: white;
+  border-color: #3cc68a;
+  border-width: 3px;
+  border-style: solid;
+  padding: 10px;
+  font-size: calc(10px + 1vmin);
+  width: 50%;
+  margin: 0 auto;
+}
+
+.password-form-container input {
+  display: block;
+  margin-top: 10px;
+  border-style: solid;
+  border-width: 1px;
+  padding: 5px;
+  color: #3cc68a;
+  background-color: #282c34;
+  min-width: 50%
+
+}
+
+.password-form-container button {
+  display: block;
+  margin-top: 10px;
+  border-style: solid;
+  border-width: 1px;
+  padding: 5px;
+  color: white;
+  background-color: #282c34;
+  min-width: 50%
+}
+
+
+.password-form-container button:hover {
+  border-color:#3cc68a;
+}
+
+.password-form-container input[type="password"] {
+  border-color: white;
+}
+
+.password-form-container label {
+  display: block;
+  padding-top: 10px;
+}
+
+.password-form-container input[type="password"] {
+  border-color: white;
+}
+
+.password-form-container input[type="submit"] {
+  color: white;
+}
+.password-form-container input[type="submit"]:hover {
+  border-color:#3cc68a;
+}
+.Wallet-logo {
+  pointer-events: none;
+  justify-self: center;
+}
+
+
+.button {
+  font-size: calc(10px + 1vmin);
+  display: inline-block;
+  border-style: solid;
+  border-width: 1px;
+  width: 150px;
+  max-height: 150px;
+  border-color: #3cc68a;
+  margin: 10px;
+  padding-top: 5px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation-duration: 5s;
+    animation-name: App-logo-spin;
+
+  }
+}
+
+
+
+
+
+.code-cell {
+
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(45deg);
+  }
+
+  75% {
+    transform: rotate(-45deg);
+  }
+
+  to {
+    transform: rotate(0deg);
+  }
+}

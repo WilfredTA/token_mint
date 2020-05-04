@@ -1,0 +1,37 @@
+{
+  "name": "udt-mint-server",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "reset": "node --experimental-modules clearAllData.mjs",
+    "build": "rollup -c",
+    "readLog": "node --experimental-modules readLog.mjs",
+    "start": "npm run build && node build/index.js",
+    "fmt": "prettier --write \"{src,tests}/**/*.js\" rollup.config.js"
+  },
+  "author": "Tannr Allard",
+  "license": "MIT",
+  "dependencies": {
+    "@keyper/specs": "0.0.7",
+    "blake2b": "^2.1.3",
+    "body-parser": "^1.19.0",
+    "ckb-js-toolkit": "^0.9.1",
+    "ckb-js-toolkit-contrib": "file:deps/ckb-js-toolkit-contrib",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "fast-deep-equal": "^3.1.1",
+    "nohm": "^2.2.3",
+    "redis": "^3.0.2",
+    "secp256k1": "^4.0.0",
+    "uuid": "^7.0.2"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^11.0.2",
+    "@rollup/plugin-json": "^4.0.2",
+    "@rollup/plugin-node-resolve": "^7.1.1",
+    "builtin-modules": "^3.1.0",
+    "prettier": "1.19.1",
+    "rollup": "^1.32.0"
+  }
+}

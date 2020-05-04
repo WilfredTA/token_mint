@@ -1,0 +1,12 @@
+[submodule "server/deps/ckb-js-toolkit-contrib"]
+  path = server/deps/ckb-js-toolkit-contrib
+  url = https://github.com/wilfredTA/ckb-js-toolkit-contrib
+[submodule "server/deps/ckb-miscellaneous-scripts/deps/secp256k1"]
+	path = server/deps/ckb-miscellaneous-scripts/deps/secp256k1
+	url = https://github.com/nervosnetwork/secp256k1
+[submodule "server/deps/ckb-miscellaneous-scripts/deps/ckb-c-stdlib"]
+	path = server/deps/ckb-miscellaneous-scripts/deps/ckb-c-stdlib
+	url = https://github.com/nervosnetwork/ckb-c-stdlib
+[submodule "ckb-js-toolkit-contrib"]
+	path = ckb-js-toolkit-contrib
+	url = https://github.com/WilfredTA/ckb-js-toolkit-contrib
