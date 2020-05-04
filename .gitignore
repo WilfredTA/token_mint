@@ -1,7 +1,7 @@
 node_modules/
 server/node_modules
 client/node_modules
-build/
+server/build/
 server/deps/ckb-miscellaneous-scripts/build
 server/package-lock.json
 server/chain_deps.json
@@ -18,6 +18,5 @@ keyper-bridge/node_modules
 keyper-web-wallet/packages/wallet/node_modules
 keyper-web-wallet/packages/wallet/deps/keyper/node_modules
 keyper-web-wallet/node_modules
-README.md
 
 *.log
