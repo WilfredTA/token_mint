@@ -5,7 +5,6 @@ import './App.css';
 import axios from 'axios';
 import Loader from 'react-loader-spinner';
 import Wallet from './Wallet/Wallet.js'
-import Select from 'react-select'
 import create from "./newBridge.js"
 
 import * as utils from './utils.js'
