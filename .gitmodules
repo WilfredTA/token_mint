@@ -10,3 +10,9 @@
 [submodule "ckb-js-toolkit-contrib"]
 	path = ckb-js-toolkit-contrib
 	url = https://github.com/WilfredTA/ckb-js-toolkit-contrib
+[submodule "keyper-bridge/deps/keyper"]
+	path = keyper-bridge/deps/keyper
+	url = https://github.com/ququzone/keyper
+[submodule "keyper-web-wallet/packages/wallet/deps/keyper"]
+	path = keyper-web-wallet/packages/wallet/deps/keyper
+	url = https://github.com/ququzone/keyper

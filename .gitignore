@@ -13,6 +13,11 @@ wallet/deps/keyper-bridge/node_modules
 wallet/deps/keyper-bridge/deps/keyper/node_modules
 client/deps/keyper-bridge/node_modules
 client/deps/keyper-bridge/deps/keyper/node_modules
+keyper-bridge/deps/keyper/node_modules
+keyper-bridge/node_modules
+keyper-web-wallet/packages/wallet/node_modules
+keyper-web-wallet/packages/wallet/deps/keyper/node_modules
+keyper-web-wallet/node_modules
 README.md
 
 *.log
