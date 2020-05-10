@@ -16,3 +16,12 @@
 [submodule "keyper-web-wallet/packages/wallet/deps/keyper"]
 	path = keyper-web-wallet/packages/wallet/deps/keyper
 	url = https://github.com/ququzone/keyper
+[submodule "wallet/deps/keyper-web-wallet"]
+	path = wallet/deps/keyper-web-wallet
+	url = https://github.com/WilfredTA/keyper-web-wallet
+[submodule "wallet/deps/keyper-bridge"]
+	path = wallet/deps/keyper-bridge
+	url = https://github.com/WilfredTA/keyper-bridge
+[submodule "client/deps/keyper-bridge"]
+	path = client/deps/keyper-bridge
+	url = https://github.com/WilfredTA/keyper-bridge

@@ -50,6 +50,10 @@ Here is a visual demo of some of these functions:
 ### Create New Account
 ![Create Account](demo_assets/create-account.gif)
 
+
+### Sign Transaction Workflow
+![Sign Transaction Workflow](demo_assets/SignTxTokenMint.png)
+
 # Disclaimer
 
 This is meant for demonstration purposes only. The source code has not undergone a security review and I highly discourage you from using the web wallet in production at this time. Also, I am a reactJS noob, so there are probably issues with the reactJS code as well...
