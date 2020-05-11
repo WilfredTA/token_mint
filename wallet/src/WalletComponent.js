@@ -5,6 +5,7 @@ import Loader from 'react-loader-spinner';
 import { spawn, Thread, Worker } from "threads"
 import create from "./newBridge.js"
 
+
 const PARENT_ORIGIN = "http://localhost:3000"
 
 
@@ -116,7 +117,8 @@ function WalletComponent() {
     const loadWallet = async () => {
       console.log(wallet, "<< WALLET")
       if (!wallet) {
-        const webWallet = await spawn(new Worker("./walletWorker.js"))
+
+        const webWallet = await spawn(new Worker("./newWorker.js"))
         console.log(webWallet, "<< WALLET CREATED")
         await webWallet.addLockScripts()
         // let lockhashesWithMeta = await webWallet.getAllLockHashesAndMeta()
