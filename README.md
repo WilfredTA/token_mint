@@ -140,6 +140,7 @@ Here is a visual demo of some of these functions:
   `cd token_mint/server/deps/ckb-js-toolkit-contrib`
   `npm i && npm run build`
   `cd token_mint/server/deps/ckb-miscellaneous-scripts`
+  `cargo install moleculec`
   `make all-via-docker`
   `cd token_mint/server`
   `npm i && npm run build`
