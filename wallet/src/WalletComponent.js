@@ -118,7 +118,7 @@ function WalletComponent() {
       console.log(wallet, "<< WALLET")
       if (!wallet) {
 
-        const webWallet = await spawn(new Worker("./newWorker.js"))
+        const webWallet = await spawn(new Worker("./walletWorker.js"))
         console.log(webWallet, "<< WALLET CREATED")
         await webWallet.addLockScripts()
         // let lockhashesWithMeta = await webWallet.getAllLockHashesAndMeta()
