@@ -154,6 +154,10 @@ PATH_TO_CONTRACTS=~/Nervos-dev/token_mint/server/deps/ckb-miscellaneous-scripts/
 PATH_TO_CKB_DB=/home/tannrallard/Nervos-dev/ckb-dev/data/db
 ```
   
+Please note that client and wallet use node version 11.
+
+One of the dependencies (scrypt) requires that you have Python installed: `sudo apt install python`
+
 ## Setup Client
   `cd token_mint/client/deps/keyper_bridge`
   `npm i && npm run build`
@@ -163,8 +167,11 @@ PATH_TO_CKB_DB=/home/tannrallard/Nervos-dev/ckb-dev/data/db
 ## Setup Wallet
   `cd token_mint/wallet/deps/keyper_web_wallet`
   `npm i`
-  `cd packages/wallet && npm i && npm run build`
-  `cd token_mint/wallet && npm i`
+  `cd packages/wallet/deps/keyper && npm i && cd packages/container && npm i && npm run build`
+  `cd ../../../..` (to go back to wallet directory)
+  `npm i && npm run build` (assuming you're in keyper-web-wallet top level)
+  Then, navigate back to `token_mint/wallet`: `cd ../..`
+  `npm i`
   
 # Start application
 1. First, in the `server` directory, if you have already run the app before or your local ckb node already has data, you can execute the reset script `npm run reset`. Make sure that the directories in your `.env` file are correct
