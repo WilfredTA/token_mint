@@ -138,6 +138,7 @@ Here is a visual demo of some of these functions:
 ## Supported Environments
 
 - Ubuntu Linux 18.04+
+- Ubuntu Linux 20.04+
 
 ## Prerequisites
 
