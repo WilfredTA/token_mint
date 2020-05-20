@@ -163,6 +163,10 @@ A Nervos CKB node must also be installed and running. A development node is reco
 
 ## Installing Dependencies
 
+The current user must have permission to manage Docker instances!
+
+- [Manage Docker as a non-root user](https://docs.docker.com/engine/install/linux-postinstall/)
+
 ```
 cd token_mint
 ./install_deps.sh
