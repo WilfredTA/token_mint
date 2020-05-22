@@ -196,7 +196,7 @@ To reset the application back to it's original state, complete the steps below.
 
 - From the `server` directory, execute `npm run reset`.
 - In your web browser, delete the IndexedDB data for the domain `localhost`.
-- On your CKB development node, delete the `data` folder. *Note: This step is optional and will delete your local blockchain.*
+
 
 # Disclaimer
 This is meant for demonstration purposes only. The source code has not undergone a security review.
