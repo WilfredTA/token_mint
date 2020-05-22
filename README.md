@@ -133,19 +133,49 @@ Here is a visual demo of some of these functions:
 # Server Description
  Coming soon
 
-# Download and Build
-  `git clone --recurse-submodules https://github.com/WilfredTA/token_mint`
-  
+# Building
+
+## Supported Environments
+
+- Ubuntu Linux 18.04+
+- Ubuntu Linux 20.04+
+
+## Prerequisites
+
+The following must be installed and available to build Token Mint.
+
+- Build tools `sudo apt install -y build-essential`
+- Docker https://docs.docker.com/engine/install/
+- Rust https://rustup.rs/
+- Moleculec `cargo install moleculec`
+- Npm https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
+- Typescript `npm i -g typescript`
+- Redis `sudo apt install redis`
+- Python `sudo apt install python`
+- Yarn https://classic.yarnpkg.com/en/docs/install
+
+A Nervos CKB node must also be installed and running. A development node is recommended over a Testnet node.
+
+- CKB Development Node https://docs.nervos.org/dev-guide/devchain.html
+
+## Cloning the Git Repo
+
+`git clone --recurse-submodules https://github.com/WilfredTA/token_mint`
+
+## Installing Dependencies
+
+The current user must have permission to manage Docker instances!
+
+- [Manage Docker as a non-root user](https://docs.docker.com/engine/install/linux-postinstall/)
+
+```
+cd token_mint
+./install_deps.sh
+```
+
 ## Setup Server
-  `cd token_mint/server/deps/ckb-js-toolkit-contrib`
-  `npm i && npm run build`
-  `cd token_mint/server/deps/ckb-miscellaneous-scripts`
-  `cargo install moleculec`
-  `make all-via-docker`
-  `cd token_mint/server`
-  `npm i && npm run build`
-  
-Create a `.env` file in your server directory and add the following example contents to it. Make sure to replace any paths with your relevant paths. The two demo private keys correspond to keys pre-loaded with native ckbytes on ckb nodes initialized in developer mode:
+Edit the `.env` file in your server directory. Make sure to replace any paths with your relevant paths. The two demo private keys correspond to keys pre-loaded with native CKBytes on CKB nodes initialized in developer mode:
+
 ```
 SECP_CODE_HASH=0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8
 DEMO_PRIV_KEY_1=0xd00c06bfd800d27397002dca6fb0993d5ba6399b4238b2f29ee9deb97593d2bc
@@ -153,37 +183,22 @@ DEMO_PRIV_KEY_2=0x63d86723e08f0f813a36ce6aa123bb2289d90680ae1e99d4de8cdb334553f2
 PATH_TO_CONTRACTS=~/Nervos-dev/token_mint/server/deps/ckb-miscellaneous-scripts/build/
 PATH_TO_CKB_DB=/home/tannrallard/Nervos-dev/ckb-dev/data/db
 ```
-  
-Please note that client and wallet use node version 11.
 
-One of the dependencies (scrypt) requires that you have Python installed: `sudo apt install python`
+# Starting the Application
+1. Your CKB node must be installed and running.
+2. In a separate terminal window, from the `server` directory execute `npm start`.
+3. In a separate terminal window, from the `wallet` directory execute `npm start`.
+4. In a separate terminal window, from the `client` directory execute `npm start`.
+5. If it does not automatically open, point a web browser to `http://localhost:3000`.
 
-## Setup Client
-  `cd token_mint/client/deps/keyper_bridge`
-  `npm i && npm run build`
-  `cd token_mint/client`
-  `npm i`
-  
-## Setup Wallet
-  `cd token_mint/wallet/deps/keyper_web_wallet`
-  `npm i`
-  `cd packages/wallet/deps/keyper && npm i && cd packages/container && npm i && npm run build`
-  `cd ../../../..` (to go back to wallet directory)
-  `npm i && npm run build` (assuming you're in keyper-web-wallet top level)
-  Then, navigate back to `token_mint/wallet`: `cd ../..`
-  `npm i`
-  
-# Start application
-1. First, in the `server` directory, if you have already run the app before or your local ckb node already has data, you can execute the reset script `npm run reset`. Make sure that the directories in your `.env` file are correct
-2. Start your local CKB node and miner
-3. Start server by `npm run start` in `server` directory
-4. Then navigate to the wallet directory and `npm start`
-5. Then navigate to client directory and `npm start`
+# Resetting the Application State
+To reset the application back to it's original state, complete the steps below.
 
-The above setup and start instructions should work, but if you have problems with the submodules, you can get them manually and please add an issue informing me that the instructions here do not work as-is.
+- From the `server` directory, execute `npm run reset`.
+- In your web browser, delete the IndexedDB data for the domain `localhost`.
+- On your CKB development node, delete the `data` folder. *Note: This step is optional and will delete your local blockchain.*
 
 # Disclaimer
-
 This is meant for demonstration purposes only. The source code has not undergone a security review.
 
 Having said that, I highly *encourage* experimenting with the app, or playing around with the web wallet setup and/or keyper-bridge in your own **toy** projects!
