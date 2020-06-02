@@ -11,7 +11,10 @@
 - [Demo](#demonstration-of-functionality)
 - [What is Keyper?](#what-is-keyper)
 - [Components of Server](#server-description)
-- [Setup Instructions](#download-and-build)
+- [Setup Instructions](#setup-instructions)
+- [Starting the Application](#starting-the-application)
+- [Resetting the Application State](#resetting-the-application-state)
+- [Disclaimer](#disclaimer)
 
 # Introduction
 This is a demo web application for working with User Defined Tokens (UDTs) on Nervos Network's Layer 1 Blockchain, Common Knowledge Base.
@@ -133,7 +136,7 @@ Here is a visual demo of some of these functions:
 # Server Description
  Coming soon
 
-# Building
+# Setup Instructions
 
 ## Supported Environments
 
