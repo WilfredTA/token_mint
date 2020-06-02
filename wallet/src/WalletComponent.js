@@ -4,7 +4,7 @@ import logo from './logo.png';
 import Loader from 'react-loader-spinner';
 import { spawn, Thread, Worker } from "threads"
 import create from "./newBridge.js"
-
+import { deleteDB } from 'idb'
 
 const PARENT_ORIGIN = "http://localhost:3000"
 
@@ -287,6 +287,17 @@ function WalletComponent() {
         console.log(e)
     }
   }
+
+  const handleResetClick = (e) => {
+    const confirmed = window.confirm("Are you sure you want to reset your wallet data?")
+    if(confirmed)
+    {
+      deleteDB("web-wallet", ()=>{alert("blocked")})
+      setWalletWorkflow(WALLET_STEPS.CHOOSE)
+      window.location.reload();
+    }
+  }
+
   const handleUnlockClick = (e) => {
     setWalletWorkflow(WORKFLOWS.UNLOCK)
     step()
@@ -317,6 +328,7 @@ function WalletComponent() {
       <div className="button" onClick={handleImportClick}> Import Key </div>
       <div className="button" onClick={handleCreateClick}> Create New Wallet </div>
       <div className="button" onClick={handleUnlockClick}> Unlock Wallet </div>
+      <div className="button" onClick={handleResetClick}> Reset Wallet </div>
     </div>
   )
 
@@ -332,6 +344,7 @@ function WalletComponent() {
         <div className="button" onClick={handleUnlockClick}> Unlock Wallet </div>
         <div className="button" onClick={handleImportClick}> Import Key </div>
         <div className="button" onClick={handleCreateClick}> Create New Wallet </div>
+        <div className="button" onClick={handleResetClick}> Reset Wallet </div>
       </div>
     )
   } else {
