@@ -12,6 +12,7 @@ import * as fs from "fs";
 import { inspect, promisify } from "util";
 import { v4 as uuidv4 } from "uuid";
 import * as path from "path";
+const toArrayBuffer = require("to-arraybuffer");
 const{ addressToScript } = require('@keyper/specs')
 
 const { ckbHash,
@@ -683,9 +684,8 @@ app.get('/udts', async (req, res) => {
 
   const udt_path = path.join(__dirname,"../deps/ckb-miscellaneous-scripts/build/simple_udt" )
   // Here we load the executable file that we will deploy to chain as an on-chain verification script
-  const udt_contract = new Reader("0x" + fs.readFileSync(udt_path, "hex"))
+  const udt_contract = new Reader(toArrayBuffer(fs.readFileSync(udt_path)))
   const udt_hash = ckbHash(udt_contract).serializeJson()
-
 
   // Here we generate our lock script and lock script hash. The former will be used as the
   // lock script on our code cell. The latter will be used to gather cells by lock hash
