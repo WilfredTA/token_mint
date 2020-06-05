@@ -30,7 +30,7 @@ const SHANNONS_PER_BYTE = 100000000n
 
 
 const rpc = new RPC("http://127.0.0.1:8114/rpc");
-const client = redis.createClient();
+const client = redis.createClient({prefix: resultEnv.parsed.REDIS_PREFIX});
 const app = express()
 app.use(express.json())
 
