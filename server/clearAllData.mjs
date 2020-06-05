@@ -7,11 +7,6 @@ const client = redis.createClient();
 
 
 client.on('connect', () => {
-  let pathToDb = path.resolve(process.env.PATH_TO_CKB_DB)
-  let files = fs.readdirSync(pathToDb)
-  files.forEach((file) => {
-    fs.unlinkSync(path.join(pathToDb, file))
-  })
   client.flushall((err, reply) => {
     if (err) {
       console.log(err)
