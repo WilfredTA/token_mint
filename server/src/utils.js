@@ -2,27 +2,16 @@ import secp256k1 from "secp256k1";
 import { Reader, normalizers, validators } from "ckb-js-toolkit";
 import blake2b from "blake2b";
 import * as blockchain from "ckb-js-toolkit-contrib/src/blockchain";
+import { Hasher } from "ckb-js-toolkit-contrib/src/hasher";
 import * as nohm from "ckb-js-toolkit-contrib/src/cell_collectors/nohm";
 const { Collector } = nohm;
 import * as fs from "fs";
 import deep_equal from "fast-deep-equal";
 
-export function ckbHasher() {
-  return blake2b(
-    32,
-    null,
-    null,
-    new Uint8Array(Reader.fromRawString("ckb-default-hash").toArrayBuffer())
-  );
-}
-
 export function ckbHash(buffer) {
-  buffer = new Reader(buffer).toArrayBuffer();
-  const h = ckbHasher();
-  h.update(new Uint8Array(buffer));
-  const out = new Uint8Array(32);
-  h.digest(out);
-  return new Reader(out.buffer);
+  const h = new Hasher();
+  h.update(buffer);
+  return h.digest();
 }
 
 export function publicKeyHash(privateKey) {
@@ -171,7 +160,7 @@ export function assembleTransaction(txTemplate) {
     if (firstWitness === "0x") {
       firstWitness = {};
     }
-    const hasher = ckbHasher();
+    const hasher = new Hasher();
     firstWitness.lock =
       "0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
     const serializedWitness = new Reader(
@@ -180,9 +169,9 @@ export function assembleTransaction(txTemplate) {
       )
     );
     tx.witnesses[i] = serializedWitness.serializeJson();
-    hasher.update(new Uint8Array(txHash.toArrayBuffer()));
-    hasher.update(new Uint8Array(intToLeBuffer(serializedWitness.length())));
-    hasher.update(new Uint8Array(serializedWitness.toArrayBuffer()));
+    hasher.update(txHash.toArrayBuffer());
+    hasher.update(intToLeBuffer(serializedWitness.length()));
+    hasher.update(serializedWitness.toArrayBuffer());
     for (let j = i + 1; j < txTemplate.inputs.length; j++) {
       if (
         deep_equal(
@@ -192,15 +181,14 @@ export function assembleTransaction(txTemplate) {
       ) {
         used[j] = true;
         const w = new Reader(tx.witnesses[j]);
-        hasher.update(new Uint8Array(intToLeBuffer(w.length())));
-        hasher.update(new Uint8Array(w.toArrayBuffer()));
+        hasher.update(intToLeBuffer(w.length()));
+        hasher.update(w.toArrayBuffer());
       }
     }
-    const message = new Uint8Array(32);
-    hasher.digest(message);
+    const message = hasher.digest();
     messagesToSign.push({
       index: i,
-      message: new Reader(message.buffer).serializeJson(),
+      message: message.serializeJson(),
       lock: txTemplate.inputs[i].cell_output.lock
     });
   }
