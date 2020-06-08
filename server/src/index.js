@@ -31,7 +31,7 @@ const client = redis.createClient({prefix: resultEnv.parsed.REDIS_PREFIX});
 const app = express()
 app.use(express.json())
 
-const port = 3002
+const port = resultEnv.parsed.API_PORT;
 
 // This gathers the inputs for the outputs based on the necessary capacity AND
 // adds a change output to inputs if that is needed.
