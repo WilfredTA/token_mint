@@ -10,6 +10,7 @@ const PARENT_ORIGIN = "http://localhost:3000"
 
 
 function EnterPassword({handleSubmit, handleCancel}) {
+  const passwordElement = useRef(null);
   let [password, setPassword] = useState("")
   let [confirmPassword, setConfirmPassword] = useState("")
 
@@ -32,11 +33,17 @@ function EnterPassword({handleSubmit, handleCancel}) {
     }
   }
 
+  useEffect(() => {
+    // Focus first password field if both fields are blank.
+    if(password.length === 0 && confirmPassword.length === 0)
+      passwordElement.current.focus();
+  });
+
   return (
     <form onSubmit={handlePwSubmit}>
       <label>
         Enter Password
-        <input type="password" value={password} onChange={handlePwChange} />
+        <input ref={passwordElement} type="password" value={password} onChange={handlePwChange} />
       </label>
       <label>
         Confirm Password
