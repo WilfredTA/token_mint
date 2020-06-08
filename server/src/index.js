@@ -707,7 +707,7 @@ app.get('/udts', async (req, res) => {
   if (found_code_cell !== false) {
     return res.send({cell: found_code_cell})
   } else {
-    res.status(404).send({message: "Code cell not found"})
+    res.status(204).send({message: "Code cell not found"})
   }
 })
 
