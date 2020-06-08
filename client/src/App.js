@@ -82,11 +82,9 @@ function CreateUDTForm({submitCb, inputCb, supply, accounts}) {
 
     let options = () => {
       console.log(accounts, "<< ACCOUNTS")
-      return accounts.map((account) => {
+      return accounts.map((account, i) => {
         return (
-          <option value={account.address}
-
-          >{account.address}</option>
+          <option key={i} value={account.address}>{account.address}</option>
         )
       })
     }
@@ -188,6 +186,8 @@ function TokenCell({cell, accounts, type}) {
 
 function TokenCells({cells, accounts, displayLoad}) {
   const [displayType, setDisplayType] = useState("tokens")
+
+  // Group cells by typeHash.
   let tokenIds = {}
   cells.forEach((cell) => {
     let {typeHash} = cell
@@ -199,16 +199,13 @@ function TokenCells({cells, accounts, displayLoad}) {
   })
 
   const tokensForId = (id) => {
-    return tokenIds[id].map((cell) => {
-      return (
-        <TokenCell cell={cell} accounts={accounts} />
-      )
+    return tokenIds[id].map((cell, i) => {
+      return <TokenCell key={i} cell={cell} accounts={accounts} />;
     })
   }
   const totalBalance = (id) => {
     let balance = 0;
     tokenIds[id].forEach((token) => {
-
       balance += parseInt(unpackUdtAmount(token.asCell.data))
     })
     return balance
@@ -222,21 +219,19 @@ function TokenCells({cells, accounts, displayLoad}) {
     }
     return "No"
   }
-  const typeGroups = Object.keys(tokenIds).map((id) => {
+  const typeGroups = Object.keys(tokenIds).map((id, i) => {
     return (
-      <React.Fragment>
+      <React.Fragment key={i}>
         <h2 className="cell-type-title">Token Type: {id.substring(0,10)}</h2>
-        { tokenIds[id][0].account && <p>Governance Permissions: {getGovernancePermissions(id)} </p>}
+        {tokenIds[id][0].account && <p>Governance Permissions: {getGovernancePermissions(id)}</p>}
         {tokensForId(id)}
         <p> Total Balance: {totalBalance(id)} </p>
-        </React.Fragment>
+      </React.Fragment>
     )
   })
-  const accountsDisplay = accounts.map((acc) => {
+  const accountsDisplay = accounts.map((acc, i) => {
     return (
-      <React.Fragment>
-        <TokenCell type={{name: "account", account: acc}} />
-      </React.Fragment>
+      <TokenCell key={i} type={{name: "account", account: acc}} />
     )
   })
 
@@ -249,10 +244,11 @@ function TokenCells({cells, accounts, displayLoad}) {
   if (displayType === "tokens") {
     return (
       <div className="cells-container">
-        <h1><span className="active toggle">My Tokens</span> &nbsp; &nbsp;<span
-          className="toggle"
-          onClick={toggleView("accounts")}
-        > My Accounts </span></h1>
+        <h1>
+          <span className="active toggle">My Tokens</span>
+          &nbsp; &nbsp;
+          <span className="toggle" onClick={toggleView("accounts")}> My Accounts </span>
+        </h1>
         {!displayLoad && typeGroups}
         {displayLoad && <Loader type="ThreeDots" color="#2BAD60" height="100" width="100" />}
       </div>
@@ -260,15 +256,15 @@ function TokenCells({cells, accounts, displayLoad}) {
   } else if (displayType === "accounts") {
     return (
       <div className="cells-container">
-        <h1><span
-          className="toggle"
-          onClick={toggleView("tokens")}
-        >My Tokens</span> &nbsp; &nbsp;<span className="active toggle"> My Accounts </span></h1>
+        <h1>
+          <span className="toggle" onClick={toggleView("tokens")}>My Tokens</span>
+          &nbsp; &nbsp;
+          <span className="active toggle">My Accounts</span>
+        </h1>
         {accountsDisplay}
       </div>
     )
   }
-
 }
 
 
