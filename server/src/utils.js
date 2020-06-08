@@ -1,3 +1,4 @@
+import dotenv from "dotenv"
 import secp256k1 from "secp256k1";
 import { Reader, normalizers, validators } from "ckb-js-toolkit";
 import blake2b from "blake2b";
@@ -7,6 +8,8 @@ import * as nohm from "ckb-js-toolkit-contrib/src/cell_collectors/nohm";
 const { Collector } = nohm;
 import * as fs from "fs";
 import deep_equal from "fast-deep-equal";
+
+const resultEnv = dotenv.config()
 
 export function ckbHash(buffer) {
   const h = new Hasher();
@@ -230,7 +233,7 @@ export function fillSignatures(tx, messagesToSign, signatures) {
 export function defaultLockScript(pubkeyHash) {
   const script = {
     code_hash:
-      "0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8",
+      resultEnv.parsed.SECP_CODE_HASH,
     hash_type: "type",
     args: pubkeyHash
   };
