@@ -718,7 +718,7 @@ app.get('/udts', async (req, res) => {
 
 
 
-client.on("connect", () => {
+client.on("ready", () => {
   Nohm.setClient(client);
   const indexer = new nohm.Indexer(rpc, client, {
     /* log: () => null */
