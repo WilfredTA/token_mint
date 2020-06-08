@@ -58,6 +58,7 @@ function EnterPassword({handleSubmit, handleCancel}) {
 
 
 function EnterKey({handleSubmit, handleCancel}) {
+  const keyElement = useRef(null);
   const [key, setKey] = useState("")
 
   const handleKeyChange = (e) => {
@@ -68,11 +69,18 @@ function EnterKey({handleSubmit, handleCancel}) {
     e.preventDefault()
     handleSubmit(key)
   }
+
+  useEffect(() => {
+    // Focus the key field if it's empty.
+    if(key.length === 0)
+      keyElement.current.focus();
+  });
+
   return (
     <form onSubmit={handleKeySubmit}>
       <label>
         Enter Key
-        <input type="text" value={key} onChange={handleKeyChange} />
+        <input ref={keyElement} type="text" value={key} onChange={handleKeyChange} />
       </label>
       <input className="submitter" type="submit" value="Submit" />
       <button onClick={handleCancel}> Cancel </button>
