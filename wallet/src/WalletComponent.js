@@ -41,13 +41,14 @@ function EnterPassword({handleSubmit, handleCancel}) {
 
   return (
     <form onSubmit={handlePwSubmit}>
+      <input type="text" name="username" value="username" autoComplete="username" readOnly style={{display: "none"}} />
       <label>
         Enter Password
-        <input ref={passwordElement} type="password" value={password} onChange={handlePwChange} />
+        <input ref={passwordElement} type="password" value={password} onChange={handlePwChange} autoComplete="current-password" />
       </label>
       <label>
         Confirm Password
-        <input type="password" value={confirmPassword} onChange={handleConfirmPwChange} />
+        <input type="password" value={confirmPassword} onChange={handleConfirmPwChange} autoComplete="current-password" />
       </label>
       <input className="submitter" type="submit" value="Submit" />
       <button onClick={handleCancel}> Cancel </button>
@@ -166,7 +167,7 @@ function WalletComponent() {
 
   const step = () => {
     currStepRef.current = currStepRef.current + 1
-    setWalletStep(walletStep + 1)
+    setWalletStep(walletStep => walletStep + 1)
   }
 
   useEffect(() => {
@@ -198,7 +199,7 @@ function WalletComponent() {
       }
     }
     processLongCommand()
-  }, [longCommand, walletStep, password, step])
+  }, [longCommand, password, bridge, keyToImport, txsToSign, wallet])
 
   useEffect(() => {
 
@@ -247,13 +248,13 @@ function WalletComponent() {
 
 
   useEffect(() => {
-    if (walletWorkflow && walletWorkflow[currStepRef.current] == WALLET_STEPS.SUBMIT){
+    if (walletWorkflow && walletWorkflow[currStepRef.current] === WALLET_STEPS.SUBMIT){
       bridge.send('wallet_ready', "", "*")
       setWalletStep(0)
       setWalletWorkflow(null)
     }
 
-  }, [walletStep, walletWorkflow])
+  }, [bridge, walletStep, walletWorkflow])
 
   // const prevStep = prevStepRef.current
 

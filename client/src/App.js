@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
-import ReactDOM from 'react-dom';
 import logo from './logo.png';
 import './App.css';
 import axios from 'axios';
@@ -9,11 +8,10 @@ import create from "./newBridge.js"
 
 import * as utils from './utils.js'
 const {
-  packUdtAmount,
   unpackUdtAmount
 } = utils
 
-const WALLET_ORIGIN = "http://localhost:3001"
+// const WALLET_ORIGIN = "http://localhost:3001"
 
 function UDTDefinitionCellStatus(props) {
   console.log(props, "<< props")
@@ -247,7 +245,7 @@ function TokenCells({cells, accounts, displayLoad}) {
         <h1>
           <span className="active toggle">My Tokens</span>
           &nbsp; &nbsp;
-          <span className="toggle" onClick={toggleView("accounts")}> My Accounts </span>
+          <span className="toggle" onClick={toggleView("accounts")}>My Accounts</span>
         </h1>
         {!displayLoad && typeGroups}
         {displayLoad && <Loader type="ThreeDots" color="#2BAD60" height="100" width="100" />}
@@ -275,7 +273,6 @@ function App() {
   const [displayLoad, setDisplayLoad] = useState(true)
   const [tokens, setTokens] = useState([])
   const [formSupply, setFormSupply] = useState(0)
-  const [txToSign, setTxToSign] = useState(null)
   const [displayWallet, setDisplayWallet] = useState(true)
   const [accounts, setAccounts] = useState([])
   const [bridge, setBridge] = useState(null)
@@ -288,7 +285,6 @@ function App() {
   let hasDeployedCodeCell = useRef(false)
 
   useEffect(() => {
-    let timeout = null;
     const getTokens = async () => {
       try {
         let res = await axios.get("/udts/instances")
@@ -326,7 +322,7 @@ function App() {
     }
 
 
-  }, [fetchTokens, accounts, displayTokenLoad])
+  }, [fetchTokens, accounts, displayTokenLoad, tokens.length])
 
 
   useEffect(() => {
@@ -429,7 +425,6 @@ function App() {
 
   const deployCodeCb = async (rawTx) => {
     setDisplayLoad(true)
-    setTxToSign(rawTx)
     console.log(rawTx, "<< TX TO SIGN")
     setDisplayWallet(true)
     let signedTx = await bridge.signTx({lockHash: accounts[0].lock, rawTx, config: {index: 0, length: -1}})
@@ -438,9 +433,7 @@ function App() {
     hasDeployedCodeCell.current = true
     console.log(result, "<< RESULT OF SEND TX")
     setDisplayWallet(false)
-    setTxToSign(null)
     setDisplayLoad(true)
-
   }
 
 
@@ -453,12 +446,10 @@ function App() {
     setDisplayCodeInfo(!displayCodeInfo)
   }
   const handleTokenSubmit = async (rawTx, account) => {
-    setTxToSign(rawTx)
     console.log(rawTx, "<< TX TO SIGN")
     setDisplayWallet(true)
     let signedTx = await bridge.signTx({lockHash: account.lock, rawTx, config: {index: 0, length: -1}})
-    let result = bridge.sendTx({signedTx, queryParam: "?type=deploy_instance"})
-    setTxToSign(null)
+    bridge.sendTx({signedTx, queryParam: "?type=deploy_instance"})
     setDisplayWallet(false)
     setDisplayTokenLoad(true)
     setFetchTokens(true)
