@@ -15,7 +15,6 @@
   "dependencies": {
     "@keyper/specs": "0.0.7",
     "blake2b": "^2.1.3",
-    "body-parser": "^1.19.0",
     "ckb-js-toolkit": "^0.9.1",
     "ckb-js-toolkit-contrib": "file:deps/ckb-js-toolkit-contrib",
     "dotenv": "^8.2.0",

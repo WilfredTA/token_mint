@@ -2,15 +2,12 @@ import * as utils from './utils'
 
 import dotenv from "dotenv"
 import express from "express";
-import bodyParser from "body-parser";
 import redis from "redis";
 import { RPC, Reader, validators, normalizers, transformers } from "ckb-js-toolkit";
 import { Nohm } from "nohm";
 import * as blockchain from "ckb-js-toolkit-contrib/src/blockchain.js";
 import * as nohm from "ckb-js-toolkit-contrib/src/cell_collectors/nohm";
 import * as fs from "fs";
-import { inspect, promisify } from "util";
-import { v4 as uuidv4 } from "uuid";
 import * as path from "path";
 const toArrayBuffer = require("to-arraybuffer");
 const{ addressToScript } = require('@keyper/specs')
