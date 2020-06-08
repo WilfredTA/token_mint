@@ -2,11 +2,11 @@ import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import './App.css';
 import logo from './logo.png';
 import Loader from 'react-loader-spinner';
-import { spawn, Thread, Worker } from "threads"
+import { spawn, Worker } from "threads"
 import create from "./newBridge.js"
 import { deleteDB } from 'idb'
 
-const PARENT_ORIGIN = "http://localhost:3000"
+// const PARENT_ORIGIN = "http://localhost:3000"
 
 
 function EnterPassword({handleSubmit, handleCancel}) {
@@ -138,7 +138,6 @@ function WalletComponent() {
   let prevStepRef = useRef()
   let walletExistsRef = useRef(null)
   let currStepRef = useRef(0)
-  let boundSignCb = useRef(false)
   let txToSignRef = useRef(null)
   let walletRef = useRef(null)
 
@@ -186,7 +185,7 @@ function WalletComponent() {
         bridge.send('return_signTx', result, id)
       } else if (longCommand === WALLET_STEPS.IMPORT) {
         const sanitizedKey = sanitizeKey(keyToImport);
-        let pubkey = await wallet.importKey(sanitizedKey, password)
+        await wallet.importKey(sanitizedKey, password)
         setDisplayLoad(false)
         setKeyToImport(false)
         step()
@@ -256,12 +255,11 @@ function WalletComponent() {
 
   }, [walletStep, walletWorkflow])
 
-  const prevStep = prevStepRef.current
+  // const prevStep = prevStepRef.current
 
 
 
   const getCurrStep = () => {
-    let current = prevStep
     if (!walletWorkflow) {
       return WALLET_STEPS.CHOOSE
     }
