@@ -8,10 +8,11 @@
   align-items: start;
   grid-gap: 10px;
   height: 100vh;
-
+  overflow: hidden;
 }
 
 iframe {
+  border: none;
   width: 100vw;
   height: 100vh;
 }
