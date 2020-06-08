@@ -73,7 +73,21 @@ function EnterKey({handleSubmit, handleCancel}) {
   );
 }
 
+/**
+ * Normalizes the private key specified by the user for import.
+ */
+function sanitizeKey(key) {
+  let sanitizedKey = key;
 
+  // Remove all whitespace.
+  sanitizedKey = sanitizedKey.replace(/\s+/g, "");
+
+  // Remove leading "0x" if present.
+  if(sanitizedKey.length > 2 && sanitizedKey.substr(0, 2) === "0x")
+    sanitizedKey = sanitizedKey.substr(2);
+
+  return sanitizedKey;
+}
 
 
 
@@ -156,7 +170,8 @@ function WalletComponent() {
         setTxsToSign({})
         bridge.send('return_signTx', result, id)
       } else if (longCommand === WALLET_STEPS.IMPORT) {
-        let pubkey = await wallet.importKey(keyToImport, password)
+        const sanitizedKey = sanitizeKey(keyToImport);
+        let pubkey = await wallet.importKey(sanitizedKey, password)
         setDisplayLoad(false)
         setKeyToImport(false)
         step()
