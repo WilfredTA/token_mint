@@ -4,7 +4,7 @@ import './App.css';
 import axios from 'axios';
 import Loader from 'react-loader-spinner';
 import Wallet from './Wallet/Wallet.js'
-import create from "./newBridge.js"
+import createBridge from "./newBridge.js"
 
 import * as utils from './utils.js'
 const {
@@ -404,7 +404,7 @@ function App() {
     const initialSetup = async () => {
       let iframe = document.getElementById("wallet").contentWindow
 
-      let clientBridge = create(iframe, window)
+      let clientBridge = createBridge(iframe, window)
 
       setBridge(clientBridge)
 

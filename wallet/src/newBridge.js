@@ -23,8 +23,7 @@ function create(sendChannel, receiveChannel, wallet=null) {
       fields: []
     }
   }
-  let bridge = new KeyperBridge(senderChannel, receiverChannel, walletMethodsMap, wallet)
-  return bridge
+  return new KeyperBridge(senderChannel, receiverChannel, walletMethodsMap, wallet)
 }
 
 export default create;

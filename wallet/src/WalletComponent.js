@@ -3,7 +3,7 @@ import './App.css';
 import logo from './logo.png';
 import Loader from 'react-loader-spinner';
 import { spawn, Worker } from "threads"
-import create from "./newBridge.js"
+import createBridge from "./newBridge.js"
 import { deleteDB } from 'idb'
 
 // const PARENT_ORIGIN = "http://localhost:3000"
@@ -158,7 +158,7 @@ function WalletComponent() {
         walletRef.current = webWallet
         setWallet(webWallet)
 
-        let walletBridge = create(window.parent, window, webWallet)
+        let walletBridge = createBridge(window.parent, window, webWallet)
         setBridge(walletBridge)
       }
     }
