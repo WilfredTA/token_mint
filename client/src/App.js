@@ -1,19 +1,17 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
-import ReactDOM from 'react-dom';
 import logo from './logo.png';
 import './App.css';
 import axios from 'axios';
 import Loader from 'react-loader-spinner';
 import Wallet from './Wallet/Wallet.js'
-import create from "./newBridge.js"
+import createBridge from "./newBridge.js"
 
 import * as utils from './utils.js'
 const {
-  packUdtAmount,
   unpackUdtAmount
 } = utils
 
-const WALLET_ORIGIN = "http://localhost:3001"
+// const WALLET_ORIGIN = "http://localhost:3001"
 
 function UDTDefinitionCellStatus(props) {
   console.log(props, "<< props")
@@ -82,11 +80,9 @@ function CreateUDTForm({submitCb, inputCb, supply, accounts}) {
 
     let options = () => {
       console.log(accounts, "<< ACCOUNTS")
-      return accounts.map((account) => {
+      return accounts.map((account, i) => {
         return (
-          <option value={account.address}
-
-          >{account.address}</option>
+          <option key={i} value={account.address}>{account.address}</option>
         )
       })
     }
@@ -188,6 +184,8 @@ function TokenCell({cell, accounts, type}) {
 
 function TokenCells({cells, accounts, displayLoad}) {
   const [displayType, setDisplayType] = useState("tokens")
+
+  // Group cells by typeHash.
   let tokenIds = {}
   cells.forEach((cell) => {
     let {typeHash} = cell
@@ -199,16 +197,13 @@ function TokenCells({cells, accounts, displayLoad}) {
   })
 
   const tokensForId = (id) => {
-    return tokenIds[id].map((cell) => {
-      return (
-        <TokenCell cell={cell} accounts={accounts} />
-      )
+    return tokenIds[id].map((cell, i) => {
+      return <TokenCell key={i} cell={cell} accounts={accounts} />;
     })
   }
   const totalBalance = (id) => {
     let balance = 0;
     tokenIds[id].forEach((token) => {
-
       balance += parseInt(unpackUdtAmount(token.asCell.data))
     })
     return balance
@@ -222,21 +217,19 @@ function TokenCells({cells, accounts, displayLoad}) {
     }
     return "No"
   }
-  const typeGroups = Object.keys(tokenIds).map((id) => {
+  const typeGroups = Object.keys(tokenIds).map((id, i) => {
     return (
-      <React.Fragment>
+      <React.Fragment key={i}>
         <h2 className="cell-type-title">Token Type: {id.substring(0,10)}</h2>
-        { tokenIds[id][0].account && <p>Governance Permissions: {getGovernancePermissions(id)} </p>}
+        {tokenIds[id][0].account && <p>Governance Permissions: {getGovernancePermissions(id)}</p>}
         {tokensForId(id)}
         <p> Total Balance: {totalBalance(id)} </p>
-        </React.Fragment>
+      </React.Fragment>
     )
   })
-  const accountsDisplay = accounts.map((acc) => {
+  const accountsDisplay = accounts.map((acc, i) => {
     return (
-      <React.Fragment>
-        <TokenCell type={{name: "account", account: acc}} />
-      </React.Fragment>
+      <TokenCell key={i} type={{name: "account", account: acc}} />
     )
   })
 
@@ -249,10 +242,11 @@ function TokenCells({cells, accounts, displayLoad}) {
   if (displayType === "tokens") {
     return (
       <div className="cells-container">
-        <h1><span className="active toggle">My Tokens</span> &nbsp; &nbsp;<span
-          className="toggle"
-          onClick={toggleView("accounts")}
-        > My Accounts </span></h1>
+        <h1>
+          <span className="active toggle">My Tokens</span>
+          &nbsp; &nbsp;
+          <span className="toggle" onClick={toggleView("accounts")}>My Accounts</span>
+        </h1>
         {!displayLoad && typeGroups}
         {displayLoad && <Loader type="ThreeDots" color="#2BAD60" height="100" width="100" />}
       </div>
@@ -260,15 +254,15 @@ function TokenCells({cells, accounts, displayLoad}) {
   } else if (displayType === "accounts") {
     return (
       <div className="cells-container">
-        <h1><span
-          className="toggle"
-          onClick={toggleView("tokens")}
-        >My Tokens</span> &nbsp; &nbsp;<span className="active toggle"> My Accounts </span></h1>
+        <h1>
+          <span className="toggle" onClick={toggleView("tokens")}>My Tokens</span>
+          &nbsp; &nbsp;
+          <span className="active toggle">My Accounts</span>
+        </h1>
         {accountsDisplay}
       </div>
     )
   }
-
 }
 
 
@@ -279,7 +273,6 @@ function App() {
   const [displayLoad, setDisplayLoad] = useState(true)
   const [tokens, setTokens] = useState([])
   const [formSupply, setFormSupply] = useState(0)
-  const [txToSign, setTxToSign] = useState(null)
   const [displayWallet, setDisplayWallet] = useState(true)
   const [accounts, setAccounts] = useState([])
   const [bridge, setBridge] = useState(null)
@@ -292,7 +285,6 @@ function App() {
   let hasDeployedCodeCell = useRef(false)
 
   useEffect(() => {
-    let timeout = null;
     const getTokens = async () => {
       try {
         let res = await axios.get("/udts/instances")
@@ -330,7 +322,7 @@ function App() {
     }
 
 
-  }, [fetchTokens, accounts, displayTokenLoad])
+  }, [fetchTokens, accounts, displayTokenLoad, tokens.length])
 
 
   useEffect(() => {
@@ -412,7 +404,7 @@ function App() {
     const initialSetup = async () => {
       let iframe = document.getElementById("wallet").contentWindow
 
-      let clientBridge = create(iframe, window)
+      let clientBridge = createBridge(iframe, window)
 
       setBridge(clientBridge)
 
@@ -433,7 +425,6 @@ function App() {
 
   const deployCodeCb = async (rawTx) => {
     setDisplayLoad(true)
-    setTxToSign(rawTx)
     console.log(rawTx, "<< TX TO SIGN")
     setDisplayWallet(true)
     let signedTx = await bridge.signTx({lockHash: accounts[0].lock, rawTx, config: {index: 0, length: -1}})
@@ -442,9 +433,7 @@ function App() {
     hasDeployedCodeCell.current = true
     console.log(result, "<< RESULT OF SEND TX")
     setDisplayWallet(false)
-    setTxToSign(null)
     setDisplayLoad(true)
-
   }
 
 
@@ -457,12 +446,10 @@ function App() {
     setDisplayCodeInfo(!displayCodeInfo)
   }
   const handleTokenSubmit = async (rawTx, account) => {
-    setTxToSign(rawTx)
     console.log(rawTx, "<< TX TO SIGN")
     setDisplayWallet(true)
     let signedTx = await bridge.signTx({lockHash: account.lock, rawTx, config: {index: 0, length: -1}})
-    let result = bridge.sendTx({signedTx, queryParam: "?type=deploy_instance"})
-    setTxToSign(null)
+    bridge.sendTx({signedTx, queryParam: "?type=deploy_instance"})
     setDisplayWallet(false)
     setDisplayTokenLoad(true)
     setFetchTokens(true)

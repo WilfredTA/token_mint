@@ -2,16 +2,14 @@ import * as utils from './utils'
 
 import dotenv from "dotenv"
 import express from "express";
-import bodyParser from "body-parser";
 import redis from "redis";
 import { RPC, Reader, validators, normalizers, transformers } from "ckb-js-toolkit";
 import { Nohm } from "nohm";
 import * as blockchain from "ckb-js-toolkit-contrib/src/blockchain.js";
 import * as nohm from "ckb-js-toolkit-contrib/src/cell_collectors/nohm";
 import * as fs from "fs";
-import { inspect, promisify } from "util";
-import { v4 as uuidv4 } from "uuid";
 import * as path from "path";
+const toArrayBuffer = require("to-arraybuffer");
 const{ addressToScript } = require('@keyper/specs')
 
 const { ckbHash,
@@ -28,12 +26,12 @@ const MINIMUM_FEE = 100000000n
 const SHANNONS_PER_BYTE = 100000000n
 
 
-const rpc = new RPC("http://127.0.0.1:8114/rpc");
-const client = redis.createClient();
+const rpc = new RPC(resultEnv.parsed.RPC_URL);
+const client = redis.createClient({prefix: resultEnv.parsed.REDIS_PREFIX});
 const app = express()
 app.use(express.json())
 
-const port = 3002
+const port = resultEnv.parsed.API_PORT;
 
 // This gathers the inputs for the outputs based on the necessary capacity AND
 // adds a change output to inputs if that is needed.
@@ -683,9 +681,8 @@ app.get('/udts', async (req, res) => {
 
   const udt_path = path.join(__dirname,"../deps/ckb-miscellaneous-scripts/build/simple_udt" )
   // Here we load the executable file that we will deploy to chain as an on-chain verification script
-  const udt_contract = new Reader("0x" + fs.readFileSync(udt_path, "hex"))
+  const udt_contract = new Reader(toArrayBuffer(fs.readFileSync(udt_path)))
   const udt_hash = ckbHash(udt_contract).serializeJson()
-
 
   // Here we generate our lock script and lock script hash. The former will be used as the
   // lock script on our code cell. The latter will be used to gather cells by lock hash
@@ -710,7 +707,7 @@ app.get('/udts', async (req, res) => {
   if (found_code_cell !== false) {
     return res.send({cell: found_code_cell})
   } else {
-    res.status(404).send({message: "Code cell not found"})
+    res.status(204).send({message: "Code cell not found"})
   }
 })
 
@@ -718,7 +715,7 @@ app.get('/udts', async (req, res) => {
 
 
 
-client.on("connect", () => {
+client.on("ready", () => {
   Nohm.setClient(client);
   const indexer = new nohm.Indexer(rpc, client, {
     /* log: () => null */

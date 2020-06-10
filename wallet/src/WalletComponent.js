@@ -2,14 +2,15 @@ import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import './App.css';
 import logo from './logo.png';
 import Loader from 'react-loader-spinner';
-import { spawn, Thread, Worker } from "threads"
-import create from "./newBridge.js"
+import { spawn, Worker } from "threads"
+import createBridge from "./newBridge.js"
+import { deleteDB } from 'idb'
 
-
-const PARENT_ORIGIN = "http://localhost:3000"
+// const PARENT_ORIGIN = "http://localhost:3000"
 
 
 function EnterPassword({handleSubmit, handleCancel}) {
+  const passwordElement = useRef(null);
   let [password, setPassword] = useState("")
   let [confirmPassword, setConfirmPassword] = useState("")
 
@@ -32,15 +33,22 @@ function EnterPassword({handleSubmit, handleCancel}) {
     }
   }
 
+  useEffect(() => {
+    // Focus first password field if both fields are blank.
+    if(password.length === 0 && confirmPassword.length === 0)
+      passwordElement.current.focus();
+  });
+
   return (
     <form onSubmit={handlePwSubmit}>
+      <input type="text" name="username" value="username" autoComplete="username" readOnly style={{display: "none"}} />
       <label>
         Enter Password
-        <input type="password" value={password} onChange={handlePwChange} />
+        <input ref={passwordElement} type="password" value={password} onChange={handlePwChange} autoComplete="current-password" />
       </label>
       <label>
         Confirm Password
-        <input type="password" value={confirmPassword} onChange={handleConfirmPwChange} />
+        <input type="password" value={confirmPassword} onChange={handleConfirmPwChange} autoComplete="current-password" />
       </label>
       <input className="submitter" type="submit" value="Submit" />
       <button onClick={handleCancel}> Cancel </button>
@@ -51,6 +59,7 @@ function EnterPassword({handleSubmit, handleCancel}) {
 
 
 function EnterKey({handleSubmit, handleCancel}) {
+  const keyElement = useRef(null);
   const [key, setKey] = useState("")
 
   const handleKeyChange = (e) => {
@@ -61,11 +70,18 @@ function EnterKey({handleSubmit, handleCancel}) {
     e.preventDefault()
     handleSubmit(key)
   }
+
+  useEffect(() => {
+    // Focus the key field if it's empty.
+    if(key.length === 0)
+      keyElement.current.focus();
+  });
+
   return (
     <form onSubmit={handleKeySubmit}>
       <label>
         Enter Key
-        <input type="text" value={key} onChange={handleKeyChange} />
+        <input ref={keyElement} type="text" value={key} onChange={handleKeyChange} />
       </label>
       <input className="submitter" type="submit" value="Submit" />
       <button onClick={handleCancel}> Cancel </button>
@@ -73,7 +89,21 @@ function EnterKey({handleSubmit, handleCancel}) {
   );
 }
 
+/**
+ * Normalizes the private key specified by the user for import.
+ */
+function sanitizeKey(key) {
+  let sanitizedKey = key;
 
+  // Remove all whitespace.
+  sanitizedKey = sanitizedKey.replace(/\s+/g, "");
+
+  // Remove leading "0x" if present.
+  if(sanitizedKey.length > 2 && sanitizedKey.substr(0, 2) === "0x")
+    sanitizedKey = sanitizedKey.substr(2);
+
+  return sanitizedKey;
+}
 
 
 
@@ -109,7 +139,6 @@ function WalletComponent() {
   let prevStepRef = useRef()
   let walletExistsRef = useRef(null)
   let currStepRef = useRef(0)
-  let boundSignCb = useRef(false)
   let txToSignRef = useRef(null)
   let walletRef = useRef(null)
 
@@ -129,7 +158,7 @@ function WalletComponent() {
         walletRef.current = webWallet
         setWallet(webWallet)
 
-        let walletBridge = create(window.parent, window, webWallet)
+        let walletBridge = createBridge(window.parent, window, webWallet)
         setBridge(walletBridge)
       }
     }
@@ -138,7 +167,7 @@ function WalletComponent() {
 
   const step = () => {
     currStepRef.current = currStepRef.current + 1
-    setWalletStep(walletStep + 1)
+    setWalletStep(walletStep => walletStep + 1)
   }
 
   useEffect(() => {
@@ -156,7 +185,8 @@ function WalletComponent() {
         setTxsToSign({})
         bridge.send('return_signTx', result, id)
       } else if (longCommand === WALLET_STEPS.IMPORT) {
-        let pubkey = await wallet.importKey(keyToImport, password)
+        const sanitizedKey = sanitizeKey(keyToImport);
+        await wallet.importKey(sanitizedKey, password)
         setDisplayLoad(false)
         setKeyToImport(false)
         step()
@@ -169,7 +199,7 @@ function WalletComponent() {
       }
     }
     processLongCommand()
-  }, [longCommand, walletStep, password, step])
+  }, [longCommand, password, bridge, keyToImport, txsToSign, wallet])
 
   useEffect(() => {
 
@@ -218,20 +248,19 @@ function WalletComponent() {
 
 
   useEffect(() => {
-    if (walletWorkflow && walletWorkflow[currStepRef.current] == WALLET_STEPS.SUBMIT){
+    if (walletWorkflow && walletWorkflow[currStepRef.current] === WALLET_STEPS.SUBMIT){
       bridge.send('wallet_ready', "", "*")
       setWalletStep(0)
       setWalletWorkflow(null)
     }
 
-  }, [walletStep, walletWorkflow])
+  }, [bridge, walletStep, walletWorkflow])
 
-  const prevStep = prevStepRef.current
+  // const prevStep = prevStepRef.current
 
 
 
   const getCurrStep = () => {
-    let current = prevStep
     if (!walletWorkflow) {
       return WALLET_STEPS.CHOOSE
     }
@@ -287,6 +316,17 @@ function WalletComponent() {
         console.log(e)
     }
   }
+
+  const handleResetClick = (e) => {
+    const confirmed = window.confirm("Are you sure you want to reset your wallet data?")
+    if(confirmed)
+    {
+      deleteDB("web-wallet", ()=>{alert("blocked")})
+      setWalletWorkflow(WALLET_STEPS.CHOOSE)
+      window.location.reload();
+    }
+  }
+
   const handleUnlockClick = (e) => {
     setWalletWorkflow(WORKFLOWS.UNLOCK)
     step()
@@ -317,6 +357,7 @@ function WalletComponent() {
       <div className="button" onClick={handleImportClick}> Import Key </div>
       <div className="button" onClick={handleCreateClick}> Create New Wallet </div>
       <div className="button" onClick={handleUnlockClick}> Unlock Wallet </div>
+      <div className="button" onClick={handleResetClick}> Reset Wallet </div>
     </div>
   )
 
@@ -332,6 +373,7 @@ function WalletComponent() {
         <div className="button" onClick={handleUnlockClick}> Unlock Wallet </div>
         <div className="button" onClick={handleImportClick}> Import Key </div>
         <div className="button" onClick={handleCreateClick}> Create New Wallet </div>
+        <div className="button" onClick={handleResetClick}> Reset Wallet </div>
       </div>
     )
   } else {

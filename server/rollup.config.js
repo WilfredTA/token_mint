@@ -22,8 +22,7 @@ module.exports = [
       "express",
       "redis",
       "uuid",
-      "dotenv",
-      "body-parser"
+      "dotenv"
     ])
   };
 });

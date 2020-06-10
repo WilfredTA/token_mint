@@ -11,7 +11,10 @@
 - [Demo](#demonstration-of-functionality)
 - [What is Keyper?](#what-is-keyper)
 - [Components of Server](#server-description)
-- [Setup Instructions](#download-and-build)
+- [Setup Instructions](#setup-instructions)
+- [Starting the Application](#starting-the-application)
+- [Resetting the Application State](#resetting-the-application-state)
+- [Disclaimer](#disclaimer)
 
 # Introduction
 This is a demo web application for working with User Defined Tokens (UDTs) on Nervos Network's Layer 1 Blockchain, Common Knowledge Base.
@@ -133,7 +136,7 @@ Here is a visual demo of some of these functions:
 # Server Description
  Coming soon
 
-# Building
+# Setup Instructions
 
 ## Supported Environments
 
@@ -154,7 +157,9 @@ The following must be installed and available to build Token Mint.
 - Python `sudo apt install python`
 - Yarn https://classic.yarnpkg.com/en/docs/install
 
-A Nervos CKB node must also be installed and running. A development node is recommended over a Testnet node.
+## Setting Up a CKB Node
+
+A Nervos CKB node must also be available. Using a development node is recommended over a Testnet node or Mainnet node.
 
 - CKB Development Node https://docs.nervos.org/dev-guide/devchain.html
 
@@ -181,7 +186,6 @@ SECP_CODE_HASH=0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce
 DEMO_PRIV_KEY_1=0xd00c06bfd800d27397002dca6fb0993d5ba6399b4238b2f29ee9deb97593d2bc
 DEMO_PRIV_KEY_2=0x63d86723e08f0f813a36ce6aa123bb2289d90680ae1e99d4de8cdb334553f24d
 PATH_TO_CONTRACTS=~/Nervos-dev/token_mint/server/deps/ckb-miscellaneous-scripts/build/
-PATH_TO_CKB_DB=/home/tannrallard/Nervos-dev/ckb-dev/data/db
 ```
 
 # Starting the Application
@@ -194,9 +198,19 @@ PATH_TO_CKB_DB=/home/tannrallard/Nervos-dev/ckb-dev/data/db
 # Resetting the Application State
 To reset the application back to it's original state, complete the steps below.
 
-- From the `server` directory, execute `npm run reset`.
-- In your web browser, delete the IndexedDB data for the domain `localhost`.
+## Reset Your CKB Node
+*Note: This step is optional and is only recommended for local development nodes.*
+- Shut down your CKB node and CKB miner if they are running.
+- Use the command `ckb reset-data --all`
+- Restart your node and miner.
 
+## Reset Your Token Mint Server
+- Stop your server if it is running.
+- From the `server` directory, execute `npm run reset`.
+- Restart your server.
+
+## Clear Your Token Mint Wallet Data
+- From the main wallet screen, click the "Reset Wallet" button.
 
 # Disclaimer
 This is meant for demonstration purposes only. The source code has not undergone a security review.
