@@ -131,7 +131,7 @@ Here is a visual demo of some of these functions:
 
 
 # What is Keyper
- Coming soon
+Keyper is an ownership layer for the Nervos. Nervos LockScripts provide a high level of flexibility, but it can be challenging for wallets to support all the different variations. Keyper provides efficient management of LockScripts in a way that can be accessed with a common standardized interface.
 
 # Server Description
  Coming soon
