@@ -7,7 +7,16 @@ function create(sendChannel, receiveChannel, wallet=null) {
       return JSON.stringify(obj)
     },
     deserialize: (string) => {
-      return JSON.parse(string)
+      try {
+        const messageObject = JSON.parse(string);
+        if(typeof messageObject === "object" && messageObject.hasOwnProperty("messageSource")) {
+          return messageObject;
+        }
+      }
+      catch {
+        // console.log(JSON.stringify(string), "<< IGNORED BRIDGE EVENT");
+      }
+      return {};
     }
   }
   const senderChannel = new SendChannel(sendChannel, "postMessage", serialization, ["*"])
